@@ -1,0 +1,18 @@
+{
+  "name": "ticket-printer-server",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "dependencies": {
+    "@node-escpos/core": "^0.4.0",
+    "@node-escpos/usb-adapter": "^0.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "sqlite3": "^5.1.6"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "watch": "nodemon src/app.js"
+  }
+}

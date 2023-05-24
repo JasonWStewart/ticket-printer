@@ -1,0 +1,11 @@
+{
+  "name": "ticket-printer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "server": "cd server && yarn watch",
+    "client": "cd client && yarn start",
+    "watch": "yarn client & yarn server"
+  }
+}

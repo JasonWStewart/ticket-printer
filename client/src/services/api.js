@@ -33,7 +33,7 @@ export const printSummary = async () => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error printing ticket:", error);
+    console.error("Error printing:", error);
     throw error;
   }
 };
@@ -48,7 +48,7 @@ export const printQueue = async (ticketQueue) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error printing ticket:", error);
+    console.error("Error printing tickets:", error);
     throw error;
   }
 };
@@ -56,6 +56,21 @@ export const printQueue = async (ticketQueue) => {
 export const cancelTicket = async (ticketId) => {
   try {
     const response = await api.delete(`tickets/${ticketId}`, {
+      headers: {
+        "x-api-key": "secret",
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error cancelling ticket:", error);
+    throw error;
+  }
+};
+
+export const getTicketStats = async () => {
+  try {
+    const response = await api.get(`tickets/stats`, {
       headers: {
         "x-api-key": "secret",
         "Content-Type": "application/json",

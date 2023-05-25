@@ -1,0 +1,23 @@
+.ticketCart {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(221, 217, 232, 0.5);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.totalBox {
+  width: 100%;
+  background-color: #ddd9e8;
+  align-self: flex-end;
+  margin-top: auto;
+  padding: 10px;
+  text-transform: capitalize;
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  font-weight: bold;
+}

@@ -1,0 +1,16 @@
+.ticketContainer {
+  background-color: #ddd9e8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style-type: none;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  text-transform: capitalize;
+}
+
+.deleteTicket {
+  color: rgb(129, 26, 26);
+  font-size: 20px;
+}

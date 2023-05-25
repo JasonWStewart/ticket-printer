@@ -12,7 +12,7 @@ function cancelledTicket(printer, ticket) {
   printer.text("────────────────────────────────────────");
   printer.feed(1);
   printer.size(2, 1).text("CANCELLED");
-  printer.text(`${ticket.ticket_number.padStart(6, "0")}`);
+  printer.text(`${ticket.ticket_number.toString().padStart(6, "0")}`);
   printer.feed(5);
   printer.cut().close();
 }

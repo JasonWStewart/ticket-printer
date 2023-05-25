@@ -19,6 +19,40 @@ export const printTicket = async (ticketData) => {
   }
 };
 
+export const printSummary = async () => {
+  try {
+    const response = await api.post(
+      "tickets/print/stats",
+      {},
+      {
+        headers: {
+          "x-api-key": "secret",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error printing ticket:", error);
+    throw error;
+  }
+};
+
+export const printQueue = async (ticketQueue) => {
+  try {
+    const response = await api.post("tickets/queue/print", ticketQueue, {
+      headers: {
+        "x-api-key": "secret",
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error printing ticket:", error);
+    throw error;
+  }
+};
+
 export const cancelTicket = async (ticketId) => {
   try {
     const response = await api.delete(`tickets/${ticketId}`, {
@@ -29,7 +63,25 @@ export const cancelTicket = async (ticketId) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error printing ticket:", error);
+    console.error("Error cancelling ticket:", error);
+    throw error;
+  }
+};
+
+export const cancelTicketsBulk = async (ticketIdArray) => {
+  try {
+    const response = await api.delete(`tickets`, {
+      headers: {
+        "x-api-key": "secret",
+        "Content-Type": "application/json",
+      },
+      data: {
+        cancelIds: ticketIdArray,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error cancelling tickets:", error);
     throw error;
   }
 };

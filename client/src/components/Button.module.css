@@ -1,0 +1,12 @@
+.buttonBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 175px;
+  height: 100px;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  background-color: #777;
+  border-radius: 8px;
+}

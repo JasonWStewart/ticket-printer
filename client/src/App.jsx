@@ -1,6 +1,7 @@
 import "./App.css";
 import { printSummary, printQueue, cancelTicketsBulk, getTicketStats } from "./services/api";
 import { useState, useEffect } from "react";
+import QueueContext from "./contexts/QueueContext";
 import Button from "./components/Button";
 import MainScreen from "./components/MainScreen";
 import ButtonContainer from "./components/ButtonContainer";
@@ -17,7 +18,6 @@ function App() {
       setLiveTicketCount(await getTicketStats());
     }
     fetchTicketStats();
-    console.log("Updating ticket stats");
   }, [lastTickets]);
 
   const addAdultHandler = () => {
@@ -62,28 +62,30 @@ function App() {
 
   return (
     <main>
-      <MainScreen>
-        <div className="leftSideSplit">
-          <ButtonContainer>
-            <Button clickHandler={addAdultHandler} displayText="Adult" color="#ef476f" />
-            <Button clickHandler={addConcessionHandler} displayText="Concession" color="#ffc300" />
-            <Button clickHandler={addYouthHandler} displayText="Youth" color="#06d6a0" />
-            <Button clickHandler={addCompHandler} displayText="Free Entry" color="#118ab2" />
-          </ButtonContainer>
-          <ButtonContainer>
-            <Button clickHandler={printQueueHandler} displayText="Print" color="#50A528" wide={true} />
-          </ButtonContainer>
-        </div>
-        <div className="rightSideSplit">
-          <TicketCart currentQueue={ticketQueue}></TicketCart>
+      <QueueContext.Provider value={{ ticketQueue, setTicketQueue }}>
+        <MainScreen>
+          <div className="leftSideSplit">
+            <ButtonContainer>
+              <Button clickHandler={addAdultHandler} displayText="Adult" color="#ef476f" />
+              <Button clickHandler={addConcessionHandler} displayText="Concession" color="#ffc300" />
+              <Button clickHandler={addYouthHandler} displayText="Youth" color="#06d6a0" />
+              <Button clickHandler={addCompHandler} displayText="Free Entry" color="#118ab2" />
+            </ButtonContainer>
+            <ButtonContainer>
+              <Button clickHandler={printQueueHandler} displayText="Print" color="#50A528" wide={true} />
+            </ButtonContainer>
+          </div>
+          <div className="rightSideSplit">
+            <TicketCart currentQueue={ticketQueue}></TicketCart>
 
-          <ButtonContainer>
-            <Button clickHandler={printSummaryHandler} displayText="Summary" color="#7777ef" />
-            <Button clickHandler={cancelHandler} displayText="Revoke" color="#ef7777" />
-          </ButtonContainer>
-        </div>
-        <StatsContainer ticketCount={liveTicketCount}></StatsContainer>
-      </MainScreen>
+            <ButtonContainer>
+              <Button clickHandler={printSummaryHandler} displayText="Summary" color="#7777ef" />
+              <Button clickHandler={cancelHandler} displayText="Revoke" color="#ef7777" />
+            </ButtonContainer>
+          </div>
+          <StatsContainer ticketCount={liveTicketCount}></StatsContainer>
+        </MainScreen>
+      </QueueContext.Provider>
     </main>
   );
 }

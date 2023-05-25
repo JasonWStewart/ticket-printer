@@ -1,16 +1,19 @@
-import React from "react";
+import { useContext } from "react";
+import QueueContext from "../contexts/QueueContext";
 import Ticket from "./Ticket";
 import styles from "./TicketCart.module.css";
 
-const deleteTicketInCartHandler = (index) => {
-  setTicketQueue((previousQueue) => {
-    return previousQueue.toSpliced(index, 1);
-  });
-};
-
 const TicketCart = (props) => {
-  console.log(props.currentQueue);
+  const { ticketQueue, setTicketQueue } = useContext(QueueContext);
+
   let totalCost = props.currentQueue.reduce((acc, ticket) => acc + ticket.price, 0);
+
+  const deleteTicketInCartHandler = (index) => {
+    setTicketQueue((previousQueue) => {
+      return previousQueue.toSpliced(index, 1);
+    });
+  };
+
   return (
     <ul className={styles.ticketCart}>
       {props.currentQueue.map((ticket, index) => (

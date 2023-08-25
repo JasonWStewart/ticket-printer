@@ -19,7 +19,12 @@ function entryTicket(printer, ticket) {
   printer.size(2, 1).text("Hanworth Villa FC");
   printer.size(1, 1).text("────────────────────────────────────────").feed(1);
   printer.size(2, 1).text("ADMIT ONE").feed(1);
-  printer.text(padStringsCenter(`£${ticket.price}`, ticket.ticketType.toUpperCase(), 18)).feed(1);
+  if (ticket.price < 1) {
+    printer.text(ticket.ticketType.toUpperCase()).feed(1);
+  } else {
+    printer.text(padStringsCenter(`£${ticket.price}`, ticket.ticketType.toUpperCase(), 18)).feed(1);
+  }
+
   printer.size(1, 1).text("──────────────────────────────────────────");
   printer.font("b").text(padStringsCenter(`${dateStrings[0]} ${dateStrings[1]}`, `${ticket.ticketNumber.toString().padStart(6, "0")}`, 56));
   printer.feed(2);

@@ -22,22 +22,42 @@ function App() {
 
   const addAdultHandler = () => {
     setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "adult", price: 9 }];
+      return [...previousQueue, { ticketType: "adult", price: 10 }];
     });
   };
   const addConcessionHandler = () => {
     setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "concession", price: 6 }];
+      return [...previousQueue, { ticketType: "concession", price: 7 }];
+    });
+  };
+  const addStudentHandler = () => {
+    setTicketQueue((previousQueue) => {
+      return [...previousQueue, { ticketType: "u21/student", price: 5 }];
     });
   };
   const addYouthHandler = () => {
     setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "youth", price: 1 }];
+      return [...previousQueue, { ticketType: "under 16", price: 1 }];
     });
   };
   const addCompHandler = () => {
     setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "comp", price: 0 }];
+      return [...previousQueue, { ticketType: "free entry", price: 0 }];
+    });
+  };
+  const addMemberAdultHandler = () => {
+    setTicketQueue((previousQueue) => {
+      return [...previousQueue, { ticketType: "Adult (M)", price: 8 }];
+    });
+  };
+  const addMemberConcessionHandler = () => {
+    setTicketQueue((previousQueue) => {
+      return [...previousQueue, { ticketType: "Concession (M)", price: 6 }];
+    });
+  };
+  const addSeasonTicketHandler = () => {
+    setTicketQueue((previousQueue) => {
+      return [...previousQueue, { ticketType: "season ticket", price: 0 }];
     });
   };
 
@@ -66,10 +86,17 @@ function App() {
         <MainScreen>
           <div className="leftSideSplit">
             <ButtonContainer>
-              <Button clickHandler={addAdultHandler} displayText="Adult" color="#ef476f" />
-              <Button clickHandler={addConcessionHandler} displayText="Concession" color="#ffc300" />
-              <Button clickHandler={addYouthHandler} displayText="Youth" color="#06d6a0" />
-              <Button clickHandler={addCompHandler} displayText="Free Entry" color="#118ab2" />
+              <Button clickHandler={addAdultHandler} displayText="Adult" color="#ff4d6d" />
+              <Button clickHandler={addMemberAdultHandler} displayText="Adult (Member)" color="#ff4d6d" />
+
+              <Button clickHandler={addConcessionHandler} displayText="Concession" color="#ee964b" />
+              <Button clickHandler={addMemberConcessionHandler} displayText="Concession (Member)" color="#ee964b" />
+
+              <Button clickHandler={addStudentHandler} displayText="Student/U21" color="#62b6cb" />
+              <Button clickHandler={addYouthHandler} displayText="Under 16" color="#06d6a0" />
+
+              <Button clickHandler={addSeasonTicketHandler} displayText="Season Ticket" color="#a4c3b2" />
+              <Button clickHandler={addCompHandler} displayText="Free Entry" color="#a4c3b2" />
             </ButtonContainer>
             <ButtonContainer>
               <Button clickHandler={printQueueHandler} displayText="Print" color="#50A528" wide={true} />
@@ -80,7 +107,7 @@ function App() {
 
             <ButtonContainer>
               <Button clickHandler={printSummaryHandler} displayText="Summary" color="#7777ef" />
-              <Button clickHandler={cancelHandler} displayText="Revoke" color="#ef7777" />
+              <Button clickHandler={cancelHandler} displayText="Revoke last sale" color="#ef7777" />
             </ButtonContainer>
           </div>
           <StatsContainer ticketCount={liveTicketCount}></StatsContainer>

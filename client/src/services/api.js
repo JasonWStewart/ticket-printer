@@ -78,7 +78,22 @@ export const getTicketStats = async () => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error cancelling ticket:", error);
+    console.error("Error getting stats:", error);
+    throw error;
+  }
+};
+
+export const getSerialDatabase = async () => {
+  try {
+    const response = await api.get(`database`, {
+      headers: {
+        "x-api-key": "secret",
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error getting database:", error);
     throw error;
   }
 };
@@ -97,6 +112,21 @@ export const cancelTicketsBulk = async (ticketIdArray) => {
     return response.data;
   } catch (error) {
     console.error("Error cancelling tickets:", error);
+    throw error;
+  }
+};
+
+export const resetDatabase = async () => {
+  try {
+    const response = await api.delete(`database`, {
+      headers: {
+        "x-api-key": "secret",
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error resetting database:", error);
     throw error;
   }
 };

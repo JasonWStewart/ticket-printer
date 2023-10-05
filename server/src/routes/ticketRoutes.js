@@ -7,13 +7,17 @@ const router = express.Router();
 router.post("/tickets/print", ticketController.printTicket);
 router.post("/tickets/queue/print", ticketController.printQueue);
 router.post("/tickets/print/stats", ticketController.printSummary);
+
 // Route to get ticket sales statistics
 router.get("/tickets/stats", ticketController.getTicketStatistics);
 
 // Route to get ticket details by ID
 router.get("/tickets/:id", ticketController.getTicketById);
 
+router.get("/database", ticketController.serialiseDatabase);
+
 router.delete("/tickets/:id", ticketController.cancelTicketById);
 router.delete("/tickets", ticketController.cancelTicketsInBulk);
+router.delete("/database", ticketController.resetDatabase);
 
 module.exports = router;

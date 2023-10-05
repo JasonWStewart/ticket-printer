@@ -1,5 +1,5 @@
 import "./App.css";
-import { printSummary, printQueue, cancelTicketsBulk, getTicketStats } from "./services/api";
+import { printSummary, printQueue, cancelTicketsBulk, getTicketStats, resetDatabase, getSerialDatabase } from "./services/api";
 import { useState, useEffect } from "react";
 import QueueContext from "./contexts/QueueContext";
 import Button from "./components/Button";
@@ -7,9 +7,11 @@ import MainScreen from "./components/MainScreen";
 import ButtonContainer from "./components/ButtonContainer";
 import TicketCart from "./components/TicketCart";
 import StatsContainer from "./components/StatsContainer";
+import AdminScreen from "./components/AdminScreen";
 
 function App() {
   const [lastTickets, setLastTickets] = useState([]);
+  const [adminMode, setAdminMode] = useState(false);
   const [ticketQueue, setTicketQueue] = useState([]);
   const [liveTicketCount, setLiveTicketCount] = useState([]);
 
@@ -18,7 +20,7 @@ function App() {
       setLiveTicketCount(await getTicketStats());
     }
     fetchTicketStats();
-  }, [lastTickets]);
+  }, [lastTickets, adminMode]);
 
   const addAdultHandler = () => {
     setTicketQueue((previousQueue) => {
@@ -80,10 +82,47 @@ function App() {
     printSummary();
   };
 
+  const adminOnHandler = () => {
+    setAdminMode(true);
+  };
+
+  const adminOffHandler = () => {
+    setAdminMode(false);
+  };
+
+  const wipeDatabaseHandler = () => {
+    resetDatabase();
+  };
+
+  const serialiseHandler = async () => {
+    const DBJSON = await getSerialDatabase();
+    const jsonString = JSON.stringify(DBJSON);
+
+    // Create a Blob object containing the JSON data
+    const blob = new Blob([jsonString], { type: "application/json" });
+
+    // Create a URL for the Blob
+    const url = URL.createObjectURL(blob);
+
+    // Create a download link
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "database.json"; // You can set the desired filename here
+
+    // Trigger a click event on the download link to start the download
+    a.click();
+
+    // Clean up by revoking the URL object
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <main>
       <QueueContext.Provider value={{ ticketQueue, setTicketQueue }}>
         <MainScreen>
+          {adminMode && (
+            <AdminScreen adminOffHandler={adminOffHandler} wipeDatabaseHandler={wipeDatabaseHandler} serialiseHandler={serialiseHandler} />
+          )}
           <div className="leftSideSplit">
             <ButtonContainer>
               <Button clickHandler={addAdultHandler} displayText="Adult" color="#ff4d6d" />
@@ -110,7 +149,10 @@ function App() {
               <Button clickHandler={cancelHandler} displayText="Revoke last sale" color="#ef7777" />
             </ButtonContainer>
           </div>
-          <StatsContainer ticketCount={liveTicketCount}></StatsContainer>
+          <div className="statSplit">
+            <StatsContainer ticketCount={liveTicketCount}></StatsContainer>
+            <Button clickHandler={adminOnHandler} displayText="ADMIN MENU" color="#333333" wide={true} />
+          </div>
         </MainScreen>
       </QueueContext.Provider>
     </main>

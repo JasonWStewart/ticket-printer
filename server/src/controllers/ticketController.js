@@ -206,6 +206,29 @@ const cancelTicketsInBulk = async (req, res) => {
   res.status(statusCode).send();
 };
 
+const resetDatabase = async (req, res) => {
+  try {
+    // Call the resetDatabase function from the ticketModel
+    ticketModel.resetDatabase();
+
+    // Respond with a success message
+    res.status(200).json({ message: "Database reset and re-initialized." });
+  } catch (err) {
+    // Handle errors, if any
+    res.status(500).json({ message: "Failed to reset the database", error: err.message });
+  }
+};
+
+const serialiseDatabase = async (req, res) => {
+  ticketModel.serialiseDatabase((err, data) => {
+    if (err) {
+      res.status(500).json({ message: "Failed to serialise database.", error: err });
+      return;
+    }
+    res.status(200).json(data);
+  });
+};
+
 module.exports = {
   printTicket,
   printQueue,
@@ -214,4 +237,6 @@ module.exports = {
   getTicketById,
   cancelTicketById,
   cancelTicketsInBulk,
+  resetDatabase,
+  serialiseDatabase,
 };

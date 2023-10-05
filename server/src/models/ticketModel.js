@@ -2,7 +2,11 @@ const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const db = new sqlite3.Database(path.join(__dirname, "..", "..", "db", "database.db"));
 
-const dateString = new Date().toISOString().slice(0, 10).replace(/-/g, "_");
+function getTodayDateString() {
+  return new Date().toISOString().slice(0, 10).replace(/-/g, "_");
+}
+
+const dateString = getTodayDateString();
 
 const createTable = () => {
   db.run(
@@ -74,6 +78,93 @@ const cancelTicketById = (ticketId, callback) => {
   });
 };
 
+const resetDatabase = () => {
+  // Get today's date in the format YYYY_MM_DD
+  const todayDate = dateString;
+
+  // Generate a list of all tables in the database
+  db.all("SELECT name FROM sqlite_master WHERE type='table'", [], (err, tables) => {
+    if (err) {
+      console.error("DB: Error fetching table names:", err);
+    } else {
+      // Drop all existing tables in the database
+      tables.forEach((table) => {
+        const tableName = table.name;
+        if (tableName.startsWith("tickets_")) {
+          db.run(`DROP TABLE IF EXISTS ${tableName}`, (err) => {
+            if (err) {
+              console.error(`DB: Error dropping table ${tableName}:`, err);
+            } else {
+              console.log(`DB: Table ${tableName} dropped.`);
+            }
+          });
+        }
+      });
+
+      // Create a new table for today's date
+      createTable(todayDate);
+    }
+  });
+};
+
+// const serialiseDatabase = (callback) => {
+//   db.all("SELECT name FROM sqlite_master WHERE type='table'", [], (err, tables) => {
+//     if (err) {
+//       console.error("DB: Error fetching table names:", err);
+//     } else {
+//       let dataArray = [];
+
+//       tables.forEach((table) => {
+//         const tableName = table.name;
+//         if (tableName.startsWith("tickets_")) {
+//           db.all(`SELECT * FROM ${tableName}`, (err, rows) => {
+//             if (err) {
+//               console.error(err.message);
+//               return;
+//             }
+//             dataArray.push({ tableName: tableName, rows: JSON.stringify(rows) });
+//           });
+//         }
+//       });
+//       console.log(dataArray);
+//     }
+//   });
+// };
+
+const serialiseDatabase = (callback) => {
+  db.all("SELECT name FROM sqlite_master WHERE type='table'", [], (err, tables) => {
+    if (err) {
+      console.error("DB: Error fetching table names:", err);
+      callback(err, null); // Call the callback with an error
+    } else {
+      let dataArray = [];
+      let pendingQueries = tables.length; // To track the number of pending queries
+
+      tables.forEach((table) => {
+        const tableName = table.name;
+        if (tableName.startsWith("tickets_")) {
+          db.all(`SELECT * FROM ${tableName}`, (err, rows) => {
+            if (err) {
+              console.error(err.message);
+            } else {
+              dataArray.push({ tableName: tableName, rows: JSON.stringify(rows) });
+            }
+
+            pendingQueries--;
+
+            if (pendingQueries === 0) {
+              // All queries have completed, call the callback with the data
+              callback(null, dataArray);
+            }
+          });
+        } else {
+          pendingQueries--; // Decrement for non-relevant tables
+        }
+      });
+    }
+  });
+};
+
 module.exports = {
   createTable,
   addTicket,
@@ -81,4 +172,6 @@ module.exports = {
   fetchTicketById,
   fetchTicketByNumber,
   cancelTicketById,
+  resetDatabase,
+  serialiseDatabase,
 };

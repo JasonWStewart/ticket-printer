@@ -122,7 +122,11 @@ const printSummary = (req, res) => {
       res.status(500).json({ message: "Failed to fetch ticket statistics" });
       return;
     }
-    printerUtils.printSummary(stats);
+
+    if (!config.dev.noPrinter) {
+      printerUtils.printSummary(stats);
+    }
+
     res.status(200).json(stats);
   });
 };

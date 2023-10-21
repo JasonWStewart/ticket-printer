@@ -1,5 +1,6 @@
 const ticketModel = require("../models/ticketModel");
 const printerUtils = require("../utils/printerUtils");
+const config = require("../../config.js");
 
 const generateUniqueTicketNumber = async () => {
   let unique = false;
@@ -41,17 +42,19 @@ const printQueue = async (req, res) => {
         printed: 0,
       };
 
-      // Print the ticket using the printerUtils
-      await new Promise((resolve, reject) => {
-        printerUtils.printEntryTicket(ticket, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            ticket.printed = 1;
-            resolve();
-          }
+      if (!config.dev.noPrinter) {
+        // Print the ticket using the printerUtils
+        await new Promise((resolve, reject) => {
+          printerUtils.printEntryTicket(ticket, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              ticket.printed = 1;
+              resolve();
+            }
+          });
         });
-      });
+      }
 
       // Save the ticket in the SQLite database
       let ticketResponse = await new Promise((resolve, reject) => {
@@ -82,17 +85,19 @@ const printTicket = async (req, res) => {
       printed: 0,
     };
 
-    // Print the ticket using the printerUtils
-    await new Promise((resolve, reject) => {
-      printerUtils.printEntryTicket(ticket, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          ticket.printed = 1;
-          resolve();
-        }
+    if (!config.dev.noPrinter) {
+      // Print the ticket using the printerUtils
+      await new Promise((resolve, reject) => {
+        printerUtils.printEntryTicket(ticket, (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            ticket.printed = 1;
+            resolve();
+          }
+        });
       });
-    });
+    }
 
     // Save the ticket in the SQLite database
     const ticketResponse = await new Promise((resolve, reject) => {

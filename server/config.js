@@ -4,4 +4,7 @@ module.exports = {
     prefix: "/api",
     key: "secret",
   },
+  dev: {
+    noPrinter: true,
+  },
 };

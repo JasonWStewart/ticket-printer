@@ -15,6 +15,17 @@ function App() {
   const [ticketQueue, setTicketQueue] = useState([]);
   const [liveTicketCount, setLiveTicketCount] = useState([]);
 
+  const ticketTypes = [
+    { ticketType: "Adult", price: 10, color: "#ff4d6d" },
+    { ticketType: "Adult (M)", price: 8, color: "#ff4d6d" },
+    { ticketType: "Concession", price: 7, color: "#ee964b" },
+    { ticketType: "Concession (M)", price: 6, color: "#ee964b" },
+    { ticketType: "Under 16", price: 1, color: "#06d6a0" },
+    { ticketType: "Free Entry", price: 0, color: "#06d6a0" },
+    { ticketType: "U21/Student", price: 5, color: "#62b6cb" },
+    { ticketType: "Season Ticket", price: 0, color: "#a4c3b2" },
+  ];
+
   useEffect(() => {
     async function fetchTicketStats() {
       setLiveTicketCount(await getTicketStats());
@@ -22,45 +33,17 @@ function App() {
     fetchTicketStats();
   }, [lastTickets, adminMode]);
 
-  const addAdultHandler = () => {
+  // Function to add a ticket to the queue
+  const addTicketToQueue = (ticket) => {
     setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "adult", price: 10 }];
+      return [...previousQueue, ticket];
     });
   };
-  const addConcessionHandler = () => {
-    setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "concession", price: 7 }];
-    });
-  };
-  const addStudentHandler = () => {
-    setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "u21/student", price: 5 }];
-    });
-  };
-  const addYouthHandler = () => {
-    setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "under 16", price: 1 }];
-    });
-  };
-  const addCompHandler = () => {
-    setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "free entry", price: 0 }];
-    });
-  };
-  const addMemberAdultHandler = () => {
-    setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "Adult (M)", price: 8 }];
-    });
-  };
-  const addMemberConcessionHandler = () => {
-    setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "Concession (M)", price: 6 }];
-    });
-  };
-  const addSeasonTicketHandler = () => {
-    setTicketQueue((previousQueue) => {
-      return [...previousQueue, { ticketType: "season ticket", price: 0 }];
-    });
+
+  const generateTicketButtons = () => {
+    return ticketTypes.map((ticket, index) => (
+      <Button key={index} clickHandler={() => addTicketToQueue(ticket)} displayText={ticket.ticketType} color={ticket.color} />
+    ));
   };
 
   const printQueueHandler = async () => {
@@ -124,19 +107,7 @@ function App() {
             <AdminScreen adminOffHandler={adminOffHandler} wipeDatabaseHandler={wipeDatabaseHandler} serialiseHandler={serialiseHandler} />
           )}
           <div className="leftSideSplit">
-            <ButtonContainer>
-              <Button clickHandler={addAdultHandler} displayText="Adult" color="#ff4d6d" />
-              <Button clickHandler={addMemberAdultHandler} displayText="Adult (Member)" color="#ff4d6d" />
-
-              <Button clickHandler={addConcessionHandler} displayText="Concession" color="#ee964b" />
-              <Button clickHandler={addMemberConcessionHandler} displayText="Concession (Member)" color="#ee964b" />
-
-              <Button clickHandler={addStudentHandler} displayText="Student/U21" color="#62b6cb" />
-              <Button clickHandler={addYouthHandler} displayText="Under 16" color="#06d6a0" />
-
-              <Button clickHandler={addSeasonTicketHandler} displayText="Season Ticket" color="#a4c3b2" />
-              <Button clickHandler={addCompHandler} displayText="Free Entry" color="#a4c3b2" />
-            </ButtonContainer>
+            <ButtonContainer>{generateTicketButtons()}</ButtonContainer>
             <ButtonContainer>
               <Button clickHandler={printQueueHandler} displayText="Print" color="#50A528" wide={true} />
             </ButtonContainer>

@@ -170,9 +170,10 @@ const cancelTicketById = async (req, res) => {
       res.status(404).json({ message: "Ticket not found." });
       return;
     }
-
-    if (targetTicket.cancelled === 0) {
-      printerUtils.printCancellation(targetTicket);
+    if (!config.dev.noPrinter) {
+      if (targetTicket.cancelled === 0) {
+        printerUtils.printCancellation(targetTicket);
+      }
     }
 
     res.status(204).send();
@@ -202,9 +203,10 @@ const cancelTicketsInBulk = async (req, res) => {
         statusCode = 404;
         return;
       }
-
-      if (targetTicket.cancelled === 0) {
-        printerUtils.printCancellation(targetTicket);
+      if (!config.dev.noPrinter) {
+        if (targetTicket.cancelled === 0) {
+          printerUtils.printCancellation(targetTicket);
+        }
       }
     });
   }

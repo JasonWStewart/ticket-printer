@@ -5,14 +5,14 @@
     { "printText": "concession", "displayText": "Concession", "itemType": "ticket", "buttonColor": "#ee964b", "price": 7 },
     { "printText": "concession (M)", "displayText": "Concession (Member)", "itemType": "ticket", "buttonColor": "#ee964b", "price": 6 },
     { "printText": "under 16", "displayText": "Under 16", "itemType": "ticket", "buttonColor": "#06d6a0", "price": 1 },
-    { "printText": "free entry", "displayText": "Free Entry", "itemType": "ticket", "buttonColor": "#06d6a0", "price": 0 },
+    { "printText": "child", "displayText": "Child", "itemType": "ticket", "buttonColor": "#06d6a0", "price": 0 },
     { "printText": "u21/student", "displayText": "U21/Student", "itemType": "ticket", "buttonColor": "#62b6cb", "price": 5 },
     { "printText": "season ticket", "displayText": "Season Ticket", "itemType": "ticket", "buttonColor": "#a4c3b2", "price": 0 }
   ],
   "alternateItems": [
     { "printText": "adult", "displayText": "Adult", "itemType": "ticket", "buttonColor": "#ff4d6d", "price": 5 },
     { "printText": "season ticket", "displayText": "Season Ticket", "itemType": "ticket", "buttonColor": "#a4c3b2", "price": 0 },
-    { "printText": "under 16", "displayText": "Under 16", "itemType": "ticket", "buttonColor": "#06d6a0", "price": 1 },
-    { "printText": "free entry", "displayText": "Free Entry", "itemType": "ticket", "buttonColor": "#06d6a0", "price": 0 }
+    { "printText": "under 18", "displayText": "Under 18", "itemType": "ticket", "buttonColor": "#06d6a0", "price": 1 },
+    { "printText": "child", "displayText": "Child", "itemType": "ticket", "buttonColor": "#06d6a0", "price": 0 }
   ]
 }

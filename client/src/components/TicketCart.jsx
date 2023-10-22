@@ -18,7 +18,7 @@ const TicketCart = (props) => {
     <ul className={styles.ticketCart}>
       {props.currentQueue.map((ticket, index) => (
         <Ticket
-          ticketType={ticket.ticketType}
+          displayText={ticket.displayText}
           key={Math.random()}
           deleteHandler={() => {
             deleteTicketInCartHandler(index);

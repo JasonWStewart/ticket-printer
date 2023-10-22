@@ -9,7 +9,8 @@ const Button = (props) => {
   }
   return (
     <div onClick={props.clickHandler} className={styles.buttonBox} style={styleObject}>
-      {props.displayText}
+      <div className={styles.buttonOverlay}>{props.children}</div>
+      <div className={styles.displayTextContainer}>{props.displayText}</div>
     </div>
   );
 };

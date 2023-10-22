@@ -7,7 +7,7 @@ const Ticket = (props) => {
   return (
     <li className={styles.ticketContainer}>
       <span>
-        <FontAwesomeIcon icon={faTicket} /> {props.ticketType} Ticket
+        <FontAwesomeIcon icon={faTicket} /> {props.displayText}
       </span>
 
       <span className={styles.deleteTicket} onClick={props.deleteHandler}>

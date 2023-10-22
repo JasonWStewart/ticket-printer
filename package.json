@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "server": "cd server && yarn watch",
-    "client": "cd client && yarn start",
-    "watch": "yarn client & yarn server"
+    "init": "cd client && npm run build",
+    "server": "cd server && npm run start",
+    "watch": "cd server && npm run watch"
   }
 }

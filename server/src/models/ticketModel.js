@@ -36,7 +36,7 @@ const addTicket = (ticket, callback) => {
     VALUES (?, ?, ?, ?, ?, 0)
   `;
 
-  db.run(query, [ticket.ticketNumber, ticket.price, ticket.ticketType, timestamp, ticket.printed], function (err) {
+  db.run(query, [ticket.ticketNumber, ticket.price, ticket.printText, timestamp, ticket.printed], function (err) {
     callback(err, { ...ticket, id: this.lastID, timestamp });
   });
 };

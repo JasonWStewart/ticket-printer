@@ -5,6 +5,6 @@ module.exports = {
     key: "secret",
   },
   dev: {
-    noPrinter: true,
+    printerlessMode: false,
   },
 };

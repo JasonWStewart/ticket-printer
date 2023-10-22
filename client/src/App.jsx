@@ -1,4 +1,5 @@
 import "./App.css";
+import config from "../config.json";
 import { printSummary, printQueue, cancelTicketsBulk, getTicketStats, resetDatabase, getSerialDatabase } from "./services/api";
 import { useState, useEffect } from "react";
 import QueueContext from "./contexts/QueueContext";
@@ -8,23 +9,14 @@ import ButtonContainer from "./components/ButtonContainer";
 import TicketCart from "./components/TicketCart";
 import StatsContainer from "./components/StatsContainer";
 import AdminScreen from "./components/AdminScreen";
+import ProductButton from "./components/ProductButton";
 
 function App() {
+  const [ticketSet, setTicketSet] = useState(config.defaultItems);
   const [lastTickets, setLastTickets] = useState([]);
   const [adminMode, setAdminMode] = useState(false);
   const [ticketQueue, setTicketQueue] = useState([]);
   const [liveTicketCount, setLiveTicketCount] = useState([]);
-
-  const ticketTypes = [
-    { ticketType: "Adult", price: 10, color: "#ff4d6d" },
-    { ticketType: "Adult (M)", price: 8, color: "#ff4d6d" },
-    { ticketType: "Concession", price: 7, color: "#ee964b" },
-    { ticketType: "Concession (M)", price: 6, color: "#ee964b" },
-    { ticketType: "Under 16", price: 1, color: "#06d6a0" },
-    { ticketType: "Free Entry", price: 0, color: "#06d6a0" },
-    { ticketType: "U21/Student", price: 5, color: "#62b6cb" },
-    { ticketType: "Season Ticket", price: 0, color: "#a4c3b2" },
-  ];
 
   useEffect(() => {
     async function fetchTicketStats() {
@@ -41,8 +33,14 @@ function App() {
   };
 
   const generateTicketButtons = () => {
-    return ticketTypes.map((ticket, index) => (
-      <Button key={index} clickHandler={() => addTicketToQueue(ticket)} displayText={ticket.ticketType} color={ticket.color} />
+    return ticketSet.map((ticket, index) => (
+      <ProductButton
+        key={index}
+        clickHandler={() => addTicketToQueue(ticket)}
+        displayText={ticket.displayText}
+        color={ticket.buttonColor}
+        price={ticket.price}
+      />
     ));
   };
 
@@ -61,10 +59,6 @@ function App() {
     setLastTickets([]);
   };
 
-  const printSummaryHandler = () => {
-    printSummary();
-  };
-
   const adminOnHandler = () => {
     setAdminMode(true);
   };
@@ -75,27 +69,27 @@ function App() {
 
   const wipeDatabaseHandler = () => {
     resetDatabase();
+    setAdminMode(false);
+  };
+
+  const changeTicketSetHandler = () => {
+    if (ticketSet === config.defaultItems) {
+      setTicketSet(config.alternateItems);
+    } else {
+      setTicketSet(config.defaultItems);
+    }
+    setAdminMode(false);
   };
 
   const serialiseHandler = async () => {
     const DBJSON = await getSerialDatabase();
     const jsonString = JSON.stringify(DBJSON);
-
-    // Create a Blob object containing the JSON data
     const blob = new Blob([jsonString], { type: "application/json" });
-
-    // Create a URL for the Blob
     const url = URL.createObjectURL(blob);
-
-    // Create a download link
     const a = document.createElement("a");
     a.href = url;
-    a.download = "database.json"; // You can set the desired filename here
-
-    // Trigger a click event on the download link to start the download
+    a.download = "database.json";
     a.click();
-
-    // Clean up by revoking the URL object
     URL.revokeObjectURL(url);
   };
 
@@ -104,7 +98,12 @@ function App() {
       <QueueContext.Provider value={{ ticketQueue, setTicketQueue }}>
         <MainScreen>
           {adminMode && (
-            <AdminScreen adminOffHandler={adminOffHandler} wipeDatabaseHandler={wipeDatabaseHandler} serialiseHandler={serialiseHandler} />
+            <AdminScreen
+              adminOffHandler={adminOffHandler}
+              wipeDatabaseHandler={wipeDatabaseHandler}
+              serialiseHandler={serialiseHandler}
+              changeTicketSetHandler={changeTicketSetHandler}
+            />
           )}
           <div className="leftSideSplit">
             <ButtonContainer>{generateTicketButtons()}</ButtonContainer>
@@ -116,7 +115,13 @@ function App() {
             <TicketCart currentQueue={ticketQueue}></TicketCart>
 
             <ButtonContainer>
-              <Button clickHandler={printSummaryHandler} displayText="Summary" color="#7777ef" />
+              <Button
+                clickHandler={() => {
+                  printSummary();
+                }}
+                displayText="Summary"
+                color="#7777ef"
+              />
               <Button clickHandler={cancelHandler} displayText="Revoke last sale" color="#ef7777" />
             </ButtonContainer>
           </div>

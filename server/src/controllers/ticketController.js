@@ -38,11 +38,11 @@ const printQueue = async (req, res) => {
       const ticket = {
         ticketNumber: newTicketNumber,
         price: queuedTicket.price,
-        ticketType: queuedTicket.ticketType,
+        printText: queuedTicket.printText,
         printed: 0,
       };
 
-      if (!config.dev.noPrinter) {
+      if (!config.dev.printerlessMode) {
         // Print the ticket using the printerUtils
         await new Promise((resolve, reject) => {
           printerUtils.printEntryTicket(ticket, (err) => {
@@ -81,11 +81,11 @@ const printTicket = async (req, res) => {
     const ticket = {
       ticketNumber: newTicketNumber,
       price: req.body.price,
-      ticketType: req.body.ticketType,
+      printText: req.body.printText,
       printed: 0,
     };
 
-    if (!config.dev.noPrinter) {
+    if (!config.dev.printerlessMode) {
       // Print the ticket using the printerUtils
       await new Promise((resolve, reject) => {
         printerUtils.printEntryTicket(ticket, (err) => {
@@ -123,7 +123,7 @@ const printSummary = (req, res) => {
       return;
     }
 
-    if (!config.dev.noPrinter) {
+    if (!config.dev.printerlessMode) {
       printerUtils.printSummary(stats);
     }
 
@@ -174,7 +174,7 @@ const cancelTicketById = async (req, res) => {
       res.status(404).json({ message: "Ticket not found." });
       return;
     }
-    if (!config.dev.noPrinter) {
+    if (!config.dev.printerlessMode) {
       if (targetTicket.cancelled === 0) {
         printerUtils.printCancellation(targetTicket);
       }
@@ -207,7 +207,7 @@ const cancelTicketsInBulk = async (req, res) => {
         statusCode = 404;
         return;
       }
-      if (!config.dev.noPrinter) {
+      if (!config.dev.printerlessMode) {
         if (targetTicket.cancelled === 0) {
           printerUtils.printCancellation(targetTicket);
         }

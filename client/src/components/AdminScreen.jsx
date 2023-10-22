@@ -11,6 +11,7 @@ const AdminScreen = (props) => {
         <ButtonContainer>
           <Button clickHandler={props.wipeDatabaseHandler} displayText="WIPE DATABASE" color="#cc3333" wide={true} />
           <Button clickHandler={props.changeTicketSetHandler} displayText="CHANGE TICKET SET" color="#339999" wide={true} />
+          <Button clickHandler={props.foodHandler} displayText="PRINT FOOD VOUCHER" color="#339999" wide={true} />
         </ButtonContainer>
       </div>
       <div className={styles.rightSideSplit}>

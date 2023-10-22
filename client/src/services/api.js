@@ -38,6 +38,25 @@ export const printSummary = async () => {
   }
 };
 
+export const printFoodVoucher = async () => {
+  try {
+    const response = await api.post(
+      "tickets/print/food",
+      {},
+      {
+        headers: {
+          "x-api-key": "secret",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error printing:", error);
+    throw error;
+  }
+};
+
 export const printQueue = async (ticketQueue) => {
   try {
     const response = await api.post("tickets/queue/print", ticketQueue, {

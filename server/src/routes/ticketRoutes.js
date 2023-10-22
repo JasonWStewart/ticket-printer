@@ -7,6 +7,7 @@ const router = express.Router();
 router.post("/tickets/print", ticketController.printTicket);
 router.post("/tickets/queue/print", ticketController.printQueue);
 router.post("/tickets/print/stats", ticketController.printSummary);
+router.post("/tickets/print/food", ticketController.printFoodVoucher);
 
 // Route to get ticket sales statistics
 router.get("/tickets/stats", ticketController.getTicketStatistics);

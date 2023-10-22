@@ -5,19 +5,10 @@ function padStringsCenter(string1, string2, maxWidth = 42) {
   return `${string1}${" ".repeat(remainingSpace)}${string2}`;
 }
 
-function entryTicket(printer, ticket) {
+async function entryTicket(printer, ticket, headerImage) {
   const dateStrings = new Date().toLocaleString().split(",");
-  console.log(ticket);
-  printer
-    .font("a")
-    .align("ct")
-    .style("normal")
-    .encode("cp437")
-    .setCharacterCodeTable(0)
-    .size(1, 1)
-    .text("────────────────────────────────────────");
-
-  printer.size(2, 1).text("Hanworth Villa FC");
+  printer.font("a").align("ct").style("normal").encode("cp437").setCharacterCodeTable(0).size(1, 1);
+  printer.raster(headerImage);
   printer.size(1, 1).text("────────────────────────────────────────").feed(1);
   printer
     .size(2, 1)
@@ -30,10 +21,7 @@ function entryTicket(printer, ticket) {
   }
 
   printer.size(1, 1).text("──────────────────────────────────────────");
-  printer
-    .size(1, 1)
-    .font("b")
-    .text(padStringsCenter(`${dateStrings[0]}`, `${dateStrings[1]}`, 54));
+  printer.font("b").text(padStringsCenter(`${dateStrings[0]}`, `${dateStrings[1]}`, 54));
   printer.feed(2);
   printer.cut().close();
 }

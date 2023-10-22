@@ -1,6 +1,14 @@
 import "./App.css";
 import config from "../config.json";
-import { printSummary, printQueue, cancelTicketsBulk, getTicketStats, resetDatabase, getSerialDatabase } from "./services/api";
+import {
+  printSummary,
+  printQueue,
+  cancelTicketsBulk,
+  getTicketStats,
+  resetDatabase,
+  getSerialDatabase,
+  printFoodVoucher,
+} from "./services/api";
 import { useState, useEffect } from "react";
 import QueueContext from "./contexts/QueueContext";
 import Button from "./components/Button";
@@ -103,6 +111,9 @@ function App() {
               wipeDatabaseHandler={wipeDatabaseHandler}
               serialiseHandler={serialiseHandler}
               changeTicketSetHandler={changeTicketSetHandler}
+              foodHandler={() => {
+                printFoodVoucher();
+              }}
             />
           )}
           <div className="leftSideSplit">

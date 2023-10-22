@@ -1,6 +1,7 @@
 const ticketModel = require("../models/ticketModel");
 const printerUtils = require("../utils/printerUtils");
 const config = require("../../config.js");
+const path = require("path");
 
 const generateUniqueTicketNumber = async () => {
   let unique = false;
@@ -31,7 +32,9 @@ const generateUniqueTicketNumber = async () => {
 
 const printQueue = async (req, res) => {
   const ticketResponses = [];
-  for (let queuedTicket of req.body) {
+  const delayBetweenPrints = 600;
+
+  async function printAndSaveTicket(queuedTicket) {
     try {
       const newTicketNumber = await generateUniqueTicketNumber();
 
@@ -43,7 +46,6 @@ const printQueue = async (req, res) => {
       };
 
       if (!config.dev.printerlessMode) {
-        // Print the ticket using the printerUtils
         await new Promise((resolve, reject) => {
           printerUtils.printEntryTicket(ticket, (err) => {
             if (err) {
@@ -54,9 +56,11 @@ const printQueue = async (req, res) => {
             }
           });
         });
+
+        // Introduce a delay before processing the next ticket
+        await new Promise((resolve) => setTimeout(resolve, delayBetweenPrints));
       }
 
-      // Save the ticket in the SQLite database
       let ticketResponse = await new Promise((resolve, reject) => {
         ticketModel.addTicket(ticket, (err, id, timestamp) => {
           if (err) {
@@ -68,10 +72,19 @@ const printQueue = async (req, res) => {
       });
       ticketResponses.push(ticketResponse);
     } catch (err) {
-      res.status(500).json({ message: "Failed to print or save the ticket(s)", error: err.message });
+      throw err; // Rethrow the error to be caught later
     }
   }
-  res.status(200).json({ message: "Ticket(s) printed and saved", response: ticketResponses });
+
+  try {
+    for (let queuedTicket of req.body) {
+      await printAndSaveTicket(queuedTicket);
+    }
+
+    res.status(200).json({ message: "Ticket(s) printed and saved", response: ticketResponses });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to print or save the ticket(s)", error: err.message });
+  }
 };
 
 const printTicket = async (req, res) => {
@@ -129,6 +142,15 @@ const printSummary = (req, res) => {
 
     res.status(200).json(stats);
   });
+};
+
+const printFoodVoucher = (req, res) => {
+  const imagePath = path.join(__dirname, "../utils/images/header.png");
+  if (!config.dev.printerlessMode) {
+    printerUtils.printFoodVoucher(imagePath);
+  }
+
+  res.status(200).json({ message: "Food" });
 };
 
 const getTicketStatistics = (req, res) => {
@@ -244,6 +266,7 @@ module.exports = {
   printTicket,
   printQueue,
   printSummary,
+  printFoodVoucher,
   getTicketStatistics,
   getTicketById,
   cancelTicketById,

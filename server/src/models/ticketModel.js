@@ -107,30 +107,6 @@ const resetDatabase = () => {
   });
 };
 
-// const serialiseDatabase = (callback) => {
-//   db.all("SELECT name FROM sqlite_master WHERE type='table'", [], (err, tables) => {
-//     if (err) {
-//       console.error("DB: Error fetching table names:", err);
-//     } else {
-//       let dataArray = [];
-
-//       tables.forEach((table) => {
-//         const tableName = table.name;
-//         if (tableName.startsWith("tickets_")) {
-//           db.all(`SELECT * FROM ${tableName}`, (err, rows) => {
-//             if (err) {
-//               console.error(err.message);
-//               return;
-//             }
-//             dataArray.push({ tableName: tableName, rows: JSON.stringify(rows) });
-//           });
-//         }
-//       });
-//       console.log(dataArray);
-//     }
-//   });
-// };
-
 const serialiseDatabase = (callback) => {
   db.all("SELECT name FROM sqlite_master WHERE type='table'", [], (err, tables) => {
     if (err) {

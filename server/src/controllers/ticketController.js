@@ -72,7 +72,7 @@ const printQueue = async (req, res) => {
       });
       ticketResponses.push(ticketResponse);
     } catch (err) {
-      throw err; // Rethrow the error to be caught later
+      throw err;
     }
   }
 

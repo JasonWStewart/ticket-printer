@@ -41,7 +41,7 @@ export const printSummary = async () => {
 export const printFoodVoucher = async () => {
   try {
     const response = await api.post(
-      "tickets/print/food",
+      "tickets/print/food-voucher",
       {},
       {
         headers: {
@@ -59,7 +59,7 @@ export const printFoodVoucher = async () => {
 
 export const printQueue = async (ticketQueue) => {
   try {
-    const response = await api.post("tickets/queue/print", ticketQueue, {
+    const response = await api.post("tickets/print/queue", ticketQueue, {
       headers: {
         "x-api-key": "secret",
         "Content-Type": "application/json",

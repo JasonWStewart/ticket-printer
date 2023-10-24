@@ -11,7 +11,11 @@ function foodVoucher(printer, image) {
   printer.raster(image);
   printer.size(1, 1).text("────────────────────────────────────────").feed(1);
   printer.size(2, 1).text("FOOD VOUCHER").feed(1);
-  printer.size(1, 1).text("──────────────────────────────────────────");
+  printer.size(1, 1).text("One burger/hotdog & chips");
+  printer.text("and a hot drink");
+  printer.feed(1);
+  printer.text("(For draught soft drink, ask at main bar)");
+  printer.text("──────────────────────────────────────────");
   printer.font("b").text(padStringsCenter(`${dateStrings[0]}`, `${dateStrings[1]}`, 54));
   printer.feed(2);
 

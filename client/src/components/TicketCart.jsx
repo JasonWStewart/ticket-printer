@@ -8,9 +8,17 @@ const TicketCart = (props) => {
 
   let totalCost = props.currentQueue.reduce((acc, ticket) => acc + ticket.price, 0);
 
+  // const deleteTicketInCartHandler = (index) => {
+  //   setTicketQueue((previousQueue) => {
+  //     return previousQueue.toSpliced(index, 1);
+  //   });
+  // };
+
   const deleteTicketInCartHandler = (index) => {
     setTicketQueue((previousQueue) => {
-      return previousQueue.toSpliced(index, 1);
+      const newQueue = [...previousQueue];
+      newQueue.splice(index, 1);
+      return newQueue;
     });
   };
 

@@ -32,20 +32,21 @@ const generateUniqueTicketNumber = async () => {
 
 const printQueue = async (req, res) => {
   const ticketResponses = [];
-  const delayBetweenPrints = 600;
+  const delayBetweenPrints = 500;
 
   async function printAndSaveTicket(queuedTicket) {
     try {
-      const newTicketNumber = await generateUniqueTicketNumber();
-
       const ticket = {
-        ticketNumber: newTicketNumber,
+        ticketNumber: 0,
         price: queuedTicket.price,
         printText: queuedTicket.printText,
         printed: 0,
+        type: queuedTicket.itemType,
       };
 
-      if (!config.dev.printerlessMode) {
+      if (!config.dev.printerlessMode && ticket.type !== "other") {
+        const newTicketNumber = await generateUniqueTicketNumber();
+        ticket.ticketNumber = newTicketNumber;
         await new Promise((resolve, reject) => {
           printerUtils.printEntryTicket(ticket, (err) => {
             if (err) {
